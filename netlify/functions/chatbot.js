@@ -1,6 +1,6 @@
 const fetch = require('node-fetch');
 
-const API_URL = "https://api-inference.huggingface.co/models/microsoft/DialoGPT-medium";
+const API_URL = "https://api-inference.huggingface.co/models/microsoft/DialoGPT-large";
 const headers = { 
   "Authorization": `Bearer ${process.env.HUGGINGFACE_API_KEY}`,
   "Content-Type": "application/json"
