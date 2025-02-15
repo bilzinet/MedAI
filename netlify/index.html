@@ -1,224 +1,109 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Medical AI Assistant</title>
-  <!-- Bootstrap 5 CSS -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-  <!-- Font Awesome for icons -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <!-- Google Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
   <style>
-    /* Global Styles */
+    /* Basic styling for the chat interface */
     body {
-      font-family: 'Roboto', sans-serif;
+      font-family: Arial, sans-serif;
       background-color: #f8f9fa;
-      scroll-behavior: smooth;
-    }
-    /* Navbar */
-    .navbar-brand {
-      font-weight: 700;
-    }
-    /* Hero Section */
-    .hero {
-      background: url('https://source.unsplash.com/1600x900/?medical,technology') no-repeat center center/cover;
-      height: 100vh;
-      position: relative;
-      color: #fff;
-    }
-    .hero::after {
-      content: "";
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background-color: rgba(0, 0, 0, 0.5);
-    }
-    .hero-content {
-      position: relative;
-      z-index: 2;
-    }
-    /* Chatbot Section */
-    .chatbot {
-      background: #fff;
-      border-radius: 10px;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
       padding: 20px;
-      max-width: 500px;
-      margin: auto;
+    }
+    .chat-container {
+      max-width: 600px;
+      margin: 0 auto;
     }
     .chat-area {
+      border: 1px solid #ddd;
+      padding: 10px;
       height: 300px;
       overflow-y: auto;
-      background: #f1f1f1;
-      padding: 15px;
-      border-radius: 5px;
-      margin-bottom: 15px;
+      background-color: #fff;
+      margin-bottom: 10px;
     }
     .chat-area p {
-      margin: 0.5rem 0;
-      padding: 10px;
+      padding: 8px;
       border-radius: 5px;
+      margin: 5px 0;
     }
     .chat-area p.user {
-      background: #d1e7dd;
+      background-color: #d1e7dd;
       text-align: right;
     }
     .chat-area p.ai {
-      background: #cff4fc;
+      background-color: #cff4fc;
       text-align: left;
     }
-    /* Footer */
-    footer {
-      background-color: #343a40;
-      color: #ccc;
+    .input-area {
+      display: flex;
+    }
+    .input-area input {
+      flex: 1;
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      margin-right: 5px;
+    }
+    .input-area button {
+      padding: 10px 20px;
+      border: none;
+      background-color: #007bff;
+      color: #fff;
+      border-radius: 5px;
+      cursor: pointer;
     }
   </style>
 </head>
 <body>
-  <!-- Navigation Bar -->
-  <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
-    <div class="container">
-      <a class="navbar-brand" href="#">Medical AI Assistant</a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" 
-              aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
-        <ul class="navbar-nav">
-          <li class="nav-item"><a class="nav-link active" href="#hero">Home</a></li>
-          <li class="nav-item"><a class="nav-link" href="#chatbot">Chat</a></li>
-          <li class="nav-item"><a class="nav-link" href="#features">Features</a></li>
-          <li class="nav-item"><a class="nav-link" href="#contact">Contact</a></li>
-        </ul>
-      </div>
+  <div class="chat-container">
+    <h1>Medical AI Assistant Chat</h1>
+    <div class="chat-area" id="chat-area">
+      <!-- Chat messages will appear here -->
     </div>
-  </nav>
-
-  <!-- Hero Section -->
-  <header class="hero d-flex align-items-center" id="hero">
-    <div class="container text-center hero-content">
-      <h1 class="display-4 fw-bold">Your Virtual Medical AI Assistant</h1>
-      <p class="lead mb-4">Empowering your health with advanced AI-driven insights.</p>
-      <a href="#chatbot" class="btn btn-primary btn-lg">Chat Now</a>
+    <div class="input-area">
+      <input type="text" id="user-input" placeholder="Type your message..." />
+      <button onclick="sendMessage()">Send</button>
     </div>
-  </header>
+  </div>
 
-  <!-- Features Section -->
-  <section id="features" class="py-5">
-    <div class="container">
-      <h2 class="text-center mb-4">Key Features</h2>
-      <div class="row g-4">
-        <div class="col-md-4">
-          <div class="card h-100 border-0 shadow-sm">
-            <div class="card-body text-center">
-              <i class="fas fa-stethoscope fa-3x mb-3 text-primary"></i>
-              <h5 class="card-title">Medical Insights</h5>
-              <p class="card-text">Receive accurate, AI-powered medical advice tailored to your needs.</p>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div class="card h-100 border-0 shadow-sm">
-            <div class="card-body text-center">
-              <i class="fas fa-comments fa-3x mb-3 text-primary"></i>
-              <h5 class="card-title">Real-Time Chat</h5>
-              <p class="card-text">Interact with our AI assistant instantly for immediate support.</p>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div class="card h-100 border-0 shadow-sm">
-            <div class="card-body text-center">
-              <i class="fas fa-shield-alt fa-3x mb-3 text-primary"></i>
-              <h5 class="card-title">Data Security</h5>
-              <p class="card-text">Your personal data is secure and handled with the utmost care.</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Chatbot Section -->
-  <section id="chatbot" class="py-5 bg-light">
-    <div class="container">
-      <h2 class="text-center mb-4">Chat with Our AI</h2>
-      <div class="chatbot">
-        <div class="chat-area" id="chat-area">
-          <!-- Chat messages will be appended here -->
-        </div>
-        <div class="input-group">
-          <input type="text" class="form-control" placeholder="Type your message..." id="user-input">
-          <button class="btn btn-primary" onclick="sendMessage()">Send</button>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Contact Section -->
-  <section id="contact" class="py-5">
-    <div class="container">
-      <h2 class="text-center mb-4">Contact Us</h2>
-      <div class="row justify-content-center">
-        <div class="col-md-8">
-          <form>
-            <div class="mb-3">
-              <label for="name" class="form-label">Your Name</label>
-              <input type="text" class="form-control" id="name" placeholder="Enter your name">
-            </div>
-            <div class="mb-3">
-              <label for="email" class="form-label">Email Address</label>
-              <input type="email" class="form-control" id="email" placeholder="name@example.com">
-            </div>
-            <div class="mb-3">
-              <label for="message" class="form-label">Message</label>
-              <textarea class="form-control" id="message" rows="4" placeholder="Type your message"></textarea>
-            </div>
-            <button type="submit" class="btn btn-primary">Send Message</button>
-          </form>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Footer -->
-  <footer class="py-3">
-    <div class="container text-center">
-      <p class="mb-0">&copy; 2025 Medical AI Assistant. All rights reserved.</p>
-    </div>
-  </footer>
-
-  <!-- Bootstrap Bundle JS (with Popper) -->
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
   <script>
-    // Chatbot functionality
     function sendMessage() {
       const input = document.getElementById('user-input');
       const message = input.value.trim();
       if (!message) return;
+
       const chatArea = document.getElementById('chat-area');
 
-      // Append user's message
+      // Append user's message to the chat area
       const userMsg = document.createElement('p');
       userMsg.classList.add('user');
       userMsg.textContent = "You: " + message;
       chatArea.appendChild(userMsg);
-      
+
       // Clear the input field
       input.value = "";
 
-      // Simulate AI response with a delay
-      setTimeout(() => {
+      // Call the Netlify serverless function
+      fetch('/.netlify/functions/chatbot', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message: message })
+      })
+      .then(response => response.json())
+      .then(data => {
+        // Display the AI response
         const aiMsg = document.createElement('p');
         aiMsg.classList.add('ai');
-        aiMsg.textContent = "AI: This is a simulated response for \"" + message + "\".";
+        aiMsg.textContent = "AI: " + data.aiResponse;
         chatArea.appendChild(aiMsg);
+        // Auto-scroll to the bottom of the chat area
         chatArea.scrollTop = chatArea.scrollHeight;
-      }, 1000);
+      })
+      .catch(err => {
+        console.error("Error calling chatbot function:", err);
+      });
     }
   </script>
 </body>
