@@ -3,50 +3,144 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>My Free Serverless Website</title>
+  <title>Medical AI Assistant</title>
+  <!-- Google Fonts for a modern look -->
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
   <style>
+    /* General Styles */
     body {
-      font-family: Arial, sans-serif;
       margin: 0;
       padding: 0;
-      background: #f4f4f4;
-      color: #333;
+      font-family: 'Roboto', sans-serif;
+      background: linear-gradient(135deg, #1e3c72, #2a5298);
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
     }
     header, footer {
-      background: #333;
-      color: #fff;
+      background: rgba(0, 0, 0, 0.2);
       text-align: center;
-      padding: 1rem 0;
+      padding: 1rem;
+    }
+    header h1 {
+      margin: 0;
+      font-size: 2.5rem;
+    }
+    header p {
+      margin: 0.5rem 0 0;
+      font-size: 1.2rem;
     }
     main {
-      max-width: 800px;
-      margin: 2rem auto;
-      background: #fff;
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       padding: 2rem;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
     }
-    a {
-      color: #0066cc;
+    /* Chatbot Box Styles */
+    .chatbot {
+      width: 90%;
+      max-width: 500px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 10px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+      padding: 1.5rem;
+    }
+    .chatbot h2 {
+      text-align: center;
+      margin-top: 0;
+      font-size: 1.8rem;
+    }
+    .chat-area {
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 5px;
+      padding: 1rem;
+      height: 300px;
+      overflow-y: auto;
+      margin-bottom: 1rem;
+    }
+    .chat-area p {
+      margin: 0.5rem 0;
+      padding: 0.5rem;
+      border-radius: 5px;
+    }
+    .chat-area p.user {
+      background: rgba(76, 175, 80, 0.7);
+      text-align: right;
+    }
+    .chat-area p.ai {
+      background: rgba(33, 150, 243, 0.7);
+      text-align: left;
+    }
+    .input-area {
+      display: flex;
+    }
+    .input-area input {
+      flex: 1;
+      padding: 0.7rem;
+      border: none;
+      border-radius: 5px;
+      font-size: 1rem;
+    }
+    .input-area button {
+      padding: 0.7rem 1rem;
+      margin-left: 0.5rem;
+      border: none;
+      background: #4CAF50;
+      color: #fff;
+      font-size: 1rem;
+      border-radius: 5px;
+      cursor: pointer;
     }
   </style>
 </head>
 <body>
   <header>
-    <h1>Welcome to My Serverless Website</h1>
+    <h1>Medical AI Assistant</h1>
+    <p>Your Virtual Health Companion</p>
   </header>
   <main>
-    <p>
-      This is a simple, static website built with HTML and CSS.
-      It's completely free to use and can be hosted on platforms like
-      <a href="https://pages.github.com" target="_blank">GitHub Pages</a> or
-      <a href="https://www.netlify.com" target="_blank">Netlify</a>.
-    </p>
-    <p>
-      Simply edit this file to update your content. No server management required!
-    </p>
+    <div class="chatbot">
+      <h2>Chat with AI</h2>
+      <div class="chat-area" id="chat-area">
+        <!-- Chat messages will be appended here -->
+      </div>
+      <div class="input-area">
+        <input type="text" id="user-input" placeholder="Type your message..." />
+        <button onclick="sendMessage()">Send</button>
+      </div>
+    </div>
   </main>
   <footer>
-    <p>&copy; 2025 My Website. All rights reserved.</p>
+    <p>&copy; 2025 Medical AI Assistant. All rights reserved.</p>
   </footer>
+  <script>
+    function sendMessage() {
+      const input = document.getElementById('user-input');
+      const message = input.value.trim();
+      if (message === "") return;
+
+      const chatArea = document.getElementById('chat-area');
+
+      // Display the user's message
+      const userMessage = document.createElement('p');
+      userMessage.classList.add('user');
+      userMessage.textContent = "You: " + message;
+      chatArea.appendChild(userMessage);
+      
+      // Clear the input field
+      input.value = "";
+
+      // Simulate a delay and then add the AI's response
+      setTimeout(() => {
+        const aiMessage = document.createElement('p');
+        aiMessage.classList.add('ai');
+        aiMessage.textContent = "AI: This is a simulated response to your query about \"" + message + "\".";
+        chatArea.appendChild(aiMessage);
+        chatArea.scrollTop = chatArea.scrollHeight;
+      }, 1000);
+    }
+  </script>
 </body>
 </html>
