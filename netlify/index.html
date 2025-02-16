@@ -1,12 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Medibot AI Assistant</title>
 
   <!-- Google Font (Poppins) -->
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" />
+  <link
+    rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap"
+  />
 
   <style>
     /* Global Reset/Box Sizing */
@@ -25,6 +28,7 @@
       display: flex;
       justify-content: center;
       align-items: center;
+      padding: 20px;
     }
 
     /* Container for demonstration */
@@ -33,8 +37,7 @@
       border-radius: 10px;
       box-shadow: 0 4px 15px rgba(0,0,0,0.1);
       width: 90%;
-      max-width: 400px;
-      margin: 20px;
+      max-width: 550px; /* Increased width */
       overflow: hidden;
     }
 
@@ -47,45 +50,93 @@
       align-items: center;
       justify-content: space-between;
     }
+    .chat-header .header-left {
+      display: flex;
+      align-items: center;
+    }
     .chat-header img {
-      height: 30px;
+      height: 35px;
+      width: 35px;
+      border-radius: 50%; /* Make sure logo is round */
       margin-right: 10px;
+      object-fit: cover;
+    }
+    .chat-header strong {
+      font-size: 1.2rem;
     }
 
-    /* Chat Body - Scrollable */
+    /* Chat Body - Larger and Scrollable */
     .chat-body {
       background-color: #f9f9f9;
       padding: 1rem;
-      max-height: 300px;   /* Controls the vertical space */
-      overflow-y: auto;    /* Enables scrolling */
+      max-height: 400px;  /* Increased height for more messages */
+      overflow-y: auto;
     }
+
+    /* Chat Messages */
     .chat-message {
-      margin-bottom: 1rem;
       display: flex;
-      align-items: flex-start;
+      margin-bottom: 1rem;
+      width: 100%;
     }
-    .chat-message.user .avatar {
-      background-color: #28a745; /* green for user */
+    /* Align AI messages to the left */
+    .chat-message.ai {
+      justify-content: flex-start;
     }
-    .chat-message.ai .avatar {
-      background-color: #007bff; /* blue for AI */
+    /* Align User messages to the right */
+    .chat-message.user {
+      justify-content: flex-end;
     }
+
+    /* Avatar (Circular, no skew) */
     .avatar {
       width: 40px;
       height: 40px;
       border-radius: 50%;
-      margin-right: 10px;
+      background-color: #ddd;
+      color: #fff;
+      font-weight: 600;
       display: flex;
       align-items: center;
       justify-content: center;
-      color: #fff;
-      font-weight: 600;
+      margin-right: 10px; /* default margin for AI side */
+      margin-left: 10px;  /* we’ll override for user side if needed */
+      flex-shrink: 0;
+      text-transform: uppercase;
     }
+    /* For user messages, move avatar to the right side */
+    .chat-message.user .avatar {
+      margin-right: 0;
+      margin-left: 10px;
+      background-color: #28a745;
+    }
+    /* For AI messages, keep avatar on the left */
+    .chat-message.ai .avatar {
+      background-color: #007bff;
+    }
+
+    /* Chat Text (Indented, bigger font) */
     .chat-text {
+      font-size: 16px; /* Larger font size */
+      line-height: 1.4;
       background-color: #fff;
       border-radius: 5px;
-      padding: 8px 12px;
+      padding: 10px 14px;
       box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+      max-width: 70%;
+      word-wrap: break-word;
+    }
+
+    /* Different background for user vs. AI messages */
+    .chat-message.user .chat-text {
+      background-color: #e1f7e1; /* Light green for user messages */
+      margin-right: 10px; /* Indent from the right edge */
+      margin-left: auto;  /* Push text to the right */
+    }
+    .chat-message.ai .chat-text {
+      background-color: #d9e8ff; /* Light blue for AI messages */
+      margin-left: 10px; /* Indent from the left edge */
+      margin-right: auto; /* Push text to the left */
     }
 
     /* Chat Footer */
@@ -97,18 +148,23 @@
     }
     .chat-footer input {
       flex: 1;
-      padding: 0.5rem;
+      padding: 0.75rem;
       border: 1px solid #ccc;
       border-radius: 4px;
       margin-right: 0.5rem;
+      font-size: 16px; /* match chat text size */
     }
     .chat-footer button {
       background-color: #007bff;
       color: #fff;
       border: none;
-      padding: 0.5rem 1rem;
+      padding: 0.75rem 1rem;
       border-radius: 4px;
       cursor: pointer;
+      font-size: 16px;
+    }
+    .chat-footer button:hover {
+      background-color: #0056b3;
     }
   </style>
 </head>
@@ -118,6 +174,7 @@
     <!-- Chat Header -->
     <div class="chat-header">
       <div class="header-left">
+        <!-- Replace with your actual Medibot image path/URL -->
         <img src="images/medibot.png" alt="Medibot">
         <strong>Medibot</strong>
       </div>
@@ -130,7 +187,12 @@
 
     <!-- Chat Footer -->
     <div class="chat-footer">
-      <input type="text" id="user-input" placeholder="Type your message..." onkeydown="handleKey(event)"/>
+      <input
+        type="text"
+        id="user-input"
+        placeholder="Type your message..."
+        onkeydown="handleKey(event)"
+      />
       <button onclick="sendMessage()">Send</button>
     </div>
   </div>
@@ -139,7 +201,7 @@
     const chatBody = document.getElementById('chat-body');
     const userInput = document.getElementById('user-input');
 
-    // Handle 'Enter' key
+    // Handle 'Enter' key to send message
     function handleKey(e) {
       if (e.key === 'Enter') {
         sendMessage();
@@ -177,10 +239,12 @@
       const msgDiv = document.createElement('div');
       msgDiv.classList.add('chat-message', sender);
 
+      // Avatar
       const avatarDiv = document.createElement('div');
       avatarDiv.classList.add('avatar');
       avatarDiv.textContent = sender === 'user' ? 'U' : 'AI';
 
+      // Chat text
       const textDiv = document.createElement('div');
       textDiv.classList.add('chat-text');
       textDiv.textContent = text;
