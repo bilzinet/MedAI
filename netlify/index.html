@@ -2,90 +2,325 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Medical AI Assistant</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Medibot AI Assistant</title>
+
+  <!-- Google Font -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" />
+
+  <!-- Font Awesome for optional icons (e.g., close button) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+
   <style>
-    /* Basic styling for the chat interface */
+    /* ====== Global Styles ====== */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
     body {
-      font-family: Arial, sans-serif;
-      background-color: #f8f9fa;
-      padding: 20px;
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #d9f0ff, #ffffff);
+      color: #333;
+      overflow-x: hidden; /* Avoid horizontal scroll from animations */
+      min-height: 100vh;
+      position: relative;
     }
-    .chat-container {
-      max-width: 600px;
-      margin: 0 auto;
+    h1, h2, h3, h4, h5, h6 {
+      margin-bottom: 0.5rem;
     }
-    .chat-area {
-      border: 1px solid #ddd;
-      padding: 10px;
-      height: 300px;
-      overflow-y: auto;
-      background-color: #fff;
-      margin-bottom: 10px;
+    p {
+      margin-bottom: 1rem;
     }
-    .chat-area p {
-      padding: 8px;
-      border-radius: 5px;
-      margin: 5px 0;
-    }
-    .chat-area p.user {
-      background-color: #d1e7dd;
-      text-align: right;
-    }
-    .chat-area p.ai {
-      background-color: #cff4fc;
-      text-align: left;
-    }
-    .input-area {
+
+    /* ====== Header (Optional) ====== */
+    header {
+      width: 100%;
+      padding: 1.5rem 2rem;
+      background-color: #ffffffaa;
+      backdrop-filter: blur(8px);
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
       display: flex;
+      align-items: center;
+      justify-content: space-between;
     }
-    .input-area input {
-      flex: 1;
-      padding: 10px;
-      border: 1px solid #ddd;
-      border-radius: 5px;
-      margin-right: 5px;
+    header .logo {
+      display: flex;
+      align-items: center;
+      font-weight: 600;
+      font-size: 1.2rem;
     }
-    .input-area button {
-      padding: 10px 20px;
+    header .logo img {
+      height: 40px;
+      margin-right: 10px;
+    }
+
+    /* ====== Main Content (Optional Intro Section) ====== */
+    main {
+      padding: 2rem;
+      text-align: center;
+    }
+    .hero-section {
+      margin: 2rem auto;
+      max-width: 800px;
+    }
+    .hero-section h1 {
+      font-size: 2.5rem;
+      color: #007bff;
+      margin-bottom: 1rem;
+    }
+    .hero-section p {
+      font-size: 1.1rem;
+      line-height: 1.6;
+      color: #555;
+    }
+
+    /* ====== Floating Chatbot Button ====== */
+    .chatbot-btn {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      background-color: #007bff;
       border: none;
+      border-radius: 50%;
+      width: 60px;
+      height: 60px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.3s ease;
+      z-index: 999;
+    }
+    .chatbot-btn:hover {
+      transform: scale(1.05);
+    }
+    .chatbot-btn img {
+      width: 40px;
+      height: 40px;
+    }
+
+    /* ====== Chat Window ====== */
+    .chat-window {
+      position: fixed;
+      bottom: 100px;
+      right: 30px;
+      width: 350px;
+      max-width: 90%;
+      background-color: #fff;
+      border-radius: 10px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+      overflow: hidden;
+      display: none; /* Hidden by default */
+      flex-direction: column;
+      z-index: 1000;
+      animation: slideIn 0.4s forwards;
+    }
+    /* Slide in animation from the right */
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateX(100%);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    .chat-header {
       background-color: #007bff;
       color: #fff;
-      border-radius: 5px;
+      padding: 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .chat-header .title {
+      display: flex;
+      align-items: center;
+      font-weight: 600;
+    }
+    .chat-header img {
+      width: 30px;
+      height: 30px;
+      margin-right: 10px;
+    }
+    .chat-header .close-btn {
+      background: transparent;
+      border: none;
+      color: #fff;
+      font-size: 1.2rem;
       cursor: pointer;
+    }
+
+    .chat-body {
+      background-color: #f9f9f9;
+      flex: 1;
+      padding: 1rem;
+      overflow-y: auto;
+    }
+    .chat-message {
+      display: flex;
+      align-items: flex-start;
+      margin-bottom: 1rem;
+      transition: background-color 0.3s ease;
+      border-radius: 8px;
+      padding: 8px;
+    }
+    .chat-message:hover {
+      background-color: #f1f1f1;
+    }
+    .chat-message .avatar {
+      width: 40px;
+      height: 40px;
+      margin-right: 10px;
+      border-radius: 50%;
+      flex-shrink: 0;
+      background-color: #ddd;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      color: #fff;
+    }
+    .chat-message.user .avatar {
+      background-color: #28a745; /* Green for user */
+    }
+    .chat-message.ai .avatar {
+      background-color: #007bff; /* Blue for AI */
+    }
+    .chat-text {
+      background-color: #fff;
+      border-radius: 8px;
+      padding: 8px 12px;
+      max-width: 70%;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+      position: relative;
+    }
+    .chat-message.user .chat-text {
+      background-color: #e1f7e1; /* Light green for user messages */
+      margin-left: auto;
+    }
+    .chat-message.ai .chat-text {
+      background-color: #d9e8ff; /* Light blue for AI messages */
+      margin-right: auto;
+    }
+
+    .chat-footer {
+      padding: 0.75rem;
+      background-color: #f0f0f0;
+      display: flex;
+      align-items: center;
+    }
+    .chat-footer input {
+      flex: 1;
+      padding: 0.5rem 0.75rem;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      margin-right: 0.5rem;
+    }
+    .chat-footer button {
+      background-color: #007bff;
+      color: #fff;
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    .chat-footer button:hover {
+      background-color: #0056b3;
+    }
+
+    /* ====== Responsive Design ====== */
+    @media (max-width: 576px) {
+      .chat-window {
+        right: 10px;
+        width: 95%;
+      }
     }
   </style>
 </head>
 <body>
-  <div class="chat-container">
-    <h1>Medical AI Assistant Chat</h1>
-    <div class="chat-area" id="chat-area">
-      <!-- Chat messages will appear here -->
+  <!-- Header (Optional) -->
+  <header>
+    <div class="logo">
+      <!-- Replace with your Medibot icon if desired -->
+      <img src="images/medibot.png" alt="MediBot Logo">
+      <span>Medibot AI Assistant</span>
     </div>
-    <div class="input-area">
-      <input type="text" id="user-input" placeholder="Type your message..." />
+  </header>
+
+  <!-- Main Content (Optional Intro Section) -->
+  <main>
+    <div class="hero-section">
+      <h1>Welcome to Medibot!</h1>
+      <p>Experience an AI-powered medical assistant designed to help you get quick insights.  
+         Click the Medibot icon at the bottom-right corner to start chatting.</p>
+    </div>
+  </main>
+
+  <!-- Floating Chatbot Button -->
+  <button class="chatbot-btn" onclick="toggleChat()">
+    <img src="images/medibot.png" alt="Chatbot Avatar">
+  </button>
+
+  <!-- Chat Window -->
+  <div class="chat-window" id="chat-window">
+    <div class="chat-header">
+      <div class="title">
+        <img src="images/medibot.png" alt="MediBot" />
+        <span>MediBot Chat</span>
+      </div>
+      <button class="close-btn" onclick="toggleChat()">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+    <div class="chat-body" id="chat-body">
+      <!-- Messages will be appended here -->
+    </div>
+    <div class="chat-footer">
+      <input type="text" id="user-input" placeholder="Type your message..." onkeydown="handleKey(event)"/>
       <button onclick="sendMessage()">Send</button>
     </div>
   </div>
 
   <script>
+    const chatWindow = document.getElementById('chat-window');
+    const chatBody = document.getElementById('chat-body');
+    const userInput = document.getElementById('user-input');
+
+    // Toggle Chat Window
+    function toggleChat() {
+      if (chatWindow.style.display === 'none' || !chatWindow.style.display) {
+        // Show chat window with slide-in animation
+        chatWindow.style.display = 'flex';
+      } else {
+        // Hide chat window
+        chatWindow.style.display = 'none';
+      }
+    }
+
+    // Handle 'Enter' key in input
+    function handleKey(e) {
+      if (e.key === 'Enter') {
+        sendMessage();
+      }
+    }
+
+    // Send message to Netlify function and display in chat
     function sendMessage() {
-      const input = document.getElementById('user-input');
-      const message = input.value.trim();
+      const message = userInput.value.trim();
       if (!message) return;
 
-      const chatArea = document.getElementById('chat-area');
+      // Display user message
+      addMessage('user', message);
 
-      // Append user's message to the chat area
-      const userMsg = document.createElement('p');
-      userMsg.classList.add('user');
-      userMsg.textContent = "You: " + message;
-      chatArea.appendChild(userMsg);
+      // Clear input
+      userInput.value = '';
 
-      // Clear the input field
-      input.value = "";
-
-      // Call the Netlify serverless function
+      // Fetch AI response
       fetch('/.netlify/functions/chatbot', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -93,17 +328,37 @@
       })
       .then(response => response.json())
       .then(data => {
-        // Display the AI response
-        const aiMsg = document.createElement('p');
-        aiMsg.classList.add('ai');
-        aiMsg.textContent = "AI: " + data.aiResponse;
-        chatArea.appendChild(aiMsg);
-        // Auto-scroll to the bottom of the chat area
-        chatArea.scrollTop = chatArea.scrollHeight;
+        // Display AI response
+        const aiResponse = data.aiResponse || "Sorry, I didn't understand that.";
+        addMessage('ai', aiResponse);
       })
       .catch(err => {
         console.error("Error calling chatbot function:", err);
+        addMessage('ai', "Oops! Something went wrong.");
       });
+    }
+
+    // Utility to append messages to the chat body
+    function addMessage(sender, text) {
+      const msgContainer = document.createElement('div');
+      msgContainer.classList.add('chat-message', sender);
+
+      // Avatar
+      const avatar = document.createElement('div');
+      avatar.classList.add('avatar');
+      avatar.textContent = sender === 'user' ? 'U' : 'AI';
+
+      // Text
+      const msgText = document.createElement('div');
+      msgText.classList.add('chat-text');
+      msgText.textContent = text;
+
+      msgContainer.appendChild(avatar);
+      msgContainer.appendChild(msgText);
+      chatBody.appendChild(msgContainer);
+
+      // Auto-scroll to bottom
+      chatBody.scrollTop = chatBody.scrollHeight;
     }
   </script>
 </body>
