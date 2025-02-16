@@ -12,14 +12,12 @@
   />
 
   <style>
-    /* Global Reset/Box Sizing */
+    /* Global Reset */
     * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
     }
-
-    /* Body with Gradient & Poppins Font */
     body {
       font-family: 'Poppins', sans-serif;
       background: linear-gradient(135deg, #d9f0ff, #ffffff);
@@ -30,17 +28,15 @@
       align-items: center;
       padding: 20px;
     }
-
-    /* Container for demonstration */
     .container {
       background: #fff;
       border-radius: 10px;
       box-shadow: 0 4px 15px rgba(0,0,0,0.1);
       width: 90%;
-      max-width: 550px; /* Increased width */
+      max-width: 550px;
       overflow: hidden;
+      position: relative;
     }
-
     /* Chat Header */
     .chat-header {
       background-color: #007bff;
@@ -57,38 +53,32 @@
     .chat-header img {
       height: 35px;
       width: 35px;
-      border-radius: 50%; /* Make sure logo is round */
+      border-radius: 50%;
       margin-right: 10px;
       object-fit: cover;
     }
     .chat-header strong {
       font-size: 1.2rem;
     }
-
-    /* Chat Body - Larger and Scrollable */
+    /* Chat Body (Scrollable) */
     .chat-body {
       background-color: #f9f9f9;
       padding: 1rem;
-      max-height: 400px;  /* Increased height for more messages */
+      max-height: 400px;
       overflow-y: auto;
     }
-
     /* Chat Messages */
     .chat-message {
       display: flex;
       margin-bottom: 1rem;
       width: 100%;
     }
-    /* Align AI messages to the left */
     .chat-message.ai {
       justify-content: flex-start;
     }
-    /* Align User messages to the right */
     .chat-message.user {
       justify-content: flex-end;
     }
-
-    /* Avatar (Circular, no skew) */
     .avatar {
       width: 40px;
       height: 40px;
@@ -99,25 +89,23 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      margin-right: 10px; /* default margin for AI side */
-      margin-left: 10px;  /* we’ll override for user side if needed */
+      margin-right: 10px;
+      margin-left: 10px;
       flex-shrink: 0;
       text-transform: uppercase;
     }
-    /* For user messages, move avatar to the right side */
     .chat-message.user .avatar {
+      background-color: #28a745;
       margin-right: 0;
       margin-left: 10px;
-      background-color: #28a745;
     }
-    /* For AI messages, keep avatar on the left */
     .chat-message.ai .avatar {
       background-color: #007bff;
+      margin-right: 10px;
+      margin-left: 0;
     }
-
-    /* Chat Text (Indented, bigger font) */
     .chat-text {
-      font-size: 16px; /* Larger font size */
+      font-size: 16px;
       line-height: 1.4;
       background-color: #fff;
       border-radius: 5px;
@@ -126,19 +114,16 @@
       max-width: 70%;
       word-wrap: break-word;
     }
-
-    /* Different background for user vs. AI messages */
     .chat-message.user .chat-text {
-      background-color: #e1f7e1; /* Light green for user messages */
-      margin-right: 10px; /* Indent from the right edge */
-      margin-left: auto;  /* Push text to the right */
+      background-color: #e1f7e1;
+      margin-right: 10px;
+      margin-left: auto;
     }
     .chat-message.ai .chat-text {
-      background-color: #d9e8ff; /* Light blue for AI messages */
-      margin-left: 10px; /* Indent from the left edge */
-      margin-right: auto; /* Push text to the left */
+      background-color: #d9e8ff;
+      margin-left: 10px;
+      margin-right: auto;
     }
-
     /* Chat Footer */
     .chat-footer {
       background-color: #f0f0f0;
@@ -152,7 +137,7 @@
       border: 1px solid #ccc;
       border-radius: 4px;
       margin-right: 0.5rem;
-      font-size: 16px; /* match chat text size */
+      font-size: 16px;
     }
     .chat-footer button {
       background-color: #007bff;
@@ -166,15 +151,54 @@
     .chat-footer button:hover {
       background-color: #0056b3;
     }
+    /* Cover Page Overlay */
+    .cover-page {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(255,255,255,0.95);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+      text-align: center;
+      z-index: 10;
+    }
+    .cover-page h2 {
+      margin-bottom: 1rem;
+      font-size: 1.8rem;
+      color: #007bff;
+    }
+    .cover-page input {
+      padding: 0.75rem;
+      font-size: 16px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      width: 80%;
+      margin-bottom: 1rem;
+    }
+    .cover-page button {
+      background-color: #007bff;
+      color: #fff;
+      border: none;
+      padding: 0.75rem 1.5rem;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+    .cover-page button:hover {
+      background-color: #0056b3;
+    }
   </style>
 </head>
 <body>
-
   <div class="container">
     <!-- Chat Header -->
     <div class="chat-header">
       <div class="header-left">
-        <!-- Replace with your actual Medibot image path/URL -->
         <img src="images/medibot.png" alt="Medibot">
         <strong>Medibot</strong>
       </div>
@@ -182,26 +206,31 @@
 
     <!-- Chat Body -->
     <div class="chat-body" id="chat-body">
-      <!-- Messages will appear here -->
+      <!-- Chat messages will be appended here -->
     </div>
 
     <!-- Chat Footer -->
     <div class="chat-footer">
-      <input
-        type="text"
-        id="user-input"
-        placeholder="Type your message..."
-        onkeydown="handleKey(event)"
-      />
+      <input type="text" id="user-input" placeholder="Type your message..." onkeydown="handleKey(event)"/>
       <button onclick="sendMessage()">Send</button>
+    </div>
+
+    <!-- Cover Page Overlay -->
+    <div class="cover-page" id="cover-page">
+      <h2>Welcome to Med Chatbot!</h2>
+      <p>Please enter your name:</p>
+      <input type="text" id="user-name" placeholder="Your name" />
+      <button onclick="proceedChat()">Proceed</button>
     </div>
   </div>
 
   <script>
     const chatBody = document.getElementById('chat-body');
     const userInput = document.getElementById('user-input');
+    const coverPage = document.getElementById('cover-page');
+    let userName = '';
 
-    // Handle 'Enter' key to send message
+    // Handle Enter key for chat messages
     function handleKey(e) {
       if (e.key === 'Enter') {
         sendMessage();
@@ -211,14 +240,11 @@
     function sendMessage() {
       const message = userInput.value.trim();
       if (!message) return;
-
-      // Display user message
-      addMessage('user', message);
-
-      // Clear input
+      // Display user message with name (if provided)
+      addMessage('user', (userName ? userName + ': ' : '') + message);
       userInput.value = '';
 
-      // Fetch AI response from your Netlify function
+      // Fetch AI response from Netlify function
       fetch('/.netlify/functions/chatbot', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -255,6 +281,18 @@
 
       // Auto-scroll to bottom
       chatBody.scrollTop = chatBody.scrollHeight;
+    }
+
+    // Cover page proceed button handler
+    function proceedChat() {
+      const nameField = document.getElementById('user-name');
+      userName = nameField.value.trim();
+      // You can also welcome the user in the chat if desired
+      if (userName) {
+        addMessage('ai', `Hello ${userName}, how can I help you today?`);
+      }
+      // Hide the cover page overlay
+      coverPage.style.display = 'none';
     }
   </script>
 </body>
